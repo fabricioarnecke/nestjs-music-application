@@ -82,4 +82,20 @@ describe('Auth (e2e)', () => {
 
     expect(res.status).toBe(401);
   });
+
+  it('/auth/login (POST) - returns 429 after too many attempts', async () => {
+    const wrongLogin = () =>
+      request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ email: account.email, password: 'wrong-password' });
+
+    // The limit is 5 per minute and the tests above already used some of them
+    let res = await wrongLogin();
+    for (let attempt = 1; attempt < 6 && res.status !== 429; attempt++) {
+      res = await wrongLogin();
+    }
+
+    expect(res.status).toBe(429);
+    expect(res.headers).toHaveProperty('retry-after');
+  });
 });

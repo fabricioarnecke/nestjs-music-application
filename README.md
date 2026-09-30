@@ -23,6 +23,8 @@ playlists. Admins manage users and can see and edit every playlist.
 - The admin credentials come from environment variables, not from the code
 - Unexpected errors return a generic `500` response; the details only go to the server log
 - Every playlist route checks ownership, so a user can't read or change someone else's playlist
+- Rate limiting per client IP: 5 requests per minute on login and sign-up, which slows down password guessing and
+  the discovery of registered emails, and 100 per minute on every other route
 - Docker Compose publishes the API and the database on `127.0.0.1` only
 - CI fails on high or critical vulnerabilities in the dependencies, and Dependabot opens weekly update PRs
 - Unit tests cover the access rules: password hashing, sign-up always creating a regular user, playlist ownership
