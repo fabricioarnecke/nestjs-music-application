@@ -63,6 +63,20 @@ describe('Users (e2e)', () => {
     expect(res.body.role).toBe('USER');
   });
 
+  it('/users (POST) - returns 409 for an email that is already registered', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/users')
+      .set('Authorization', `Bearer ${jwtToken}`)
+      .send({
+        name: 'Another User',
+        email: 'user@test.com',
+        password: '12345',
+        role: 'USER',
+      });
+
+    expect(res.status).toBe(409);
+  });
+
   it('/users (GET) - lists all users', async () => {
     const res = await request(app.getHttpServer())
       .get('/users')
@@ -128,5 +142,28 @@ describe('Users (e2e)', () => {
       .set('Authorization', `Bearer ${jwtToken}`);
 
     expect(res.status).toBe(404);
+  });
+
+  it('/users/:id (DELETE) - also deletes the user playlists', async () => {
+    const owner = await prisma.user.create({
+      data: {
+        name: 'Playlist Owner',
+        email: 'owner@test.com',
+        password: 'not-used',
+        role: 'USER',
+        playlists: {
+          create: [{ name: 'Heavy Rock', genre: 'Metal', musics: ['snuff'] }],
+        },
+      },
+    });
+
+    const res = await request(app.getHttpServer())
+      .delete(`/users/${owner.id}`)
+      .set('Authorization', `Bearer ${jwtToken}`);
+
+    expect(res.status).toBe(200);
+    expect(await prisma.playlist.count({ where: { user_id: owner.id } })).toBe(
+      0,
+    );
   });
 });

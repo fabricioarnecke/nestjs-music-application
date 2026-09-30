@@ -41,6 +41,7 @@ export class UsersController {
     description: 'User created.',
     type: UserResponseDto,
   })
+  @ApiResponse({ status: 409, description: 'Email is already registered.' })
   @ApiBody({ type: CreateUserDto })
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
@@ -84,6 +85,7 @@ export class UsersController {
     status: 404,
     description: 'User not found.',
   })
+  @ApiResponse({ status: 409, description: 'Email is already registered.' })
   @ApiParam({ name: 'id', type: Number })
   @ApiBody({ type: UpdateUserDto })
   update(
@@ -94,10 +96,10 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a user by ID' })
+  @ApiOperation({ summary: 'Delete a user and their playlists by ID' })
   @ApiResponse({
     status: 200,
-    description: 'User deleted.',
+    description: 'User and their playlists deleted.',
     type: UserResponseDto,
   })
   @ApiResponse({
