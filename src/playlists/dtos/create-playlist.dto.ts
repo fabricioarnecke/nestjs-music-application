@@ -2,13 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreatePlaylistDto {
-  @ApiProperty({ description: 'Nome da playlist', example: 'Rock Pesado' })
+  @ApiProperty({ description: 'Playlist name', example: 'Heavy Rock' })
   @IsString()
   @IsNotEmpty()
   name: string;
 
   @ApiProperty({
-    description: 'Gênero da playlist',
+    description: 'Playlist genre',
     example: 'Metalcore',
   })
   @IsString()
@@ -16,7 +16,7 @@ export class CreatePlaylistDto {
   genre: string;
 
   @ApiProperty({
-    description: 'Lista de nome das músicas',
+    description: 'Song names',
     example: ['just-pretend', 'limits', 'like a villain'],
   })
   @IsArray()

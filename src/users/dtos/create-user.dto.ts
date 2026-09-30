@@ -9,16 +9,16 @@ import { Role } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
-  @ApiProperty({ example: 'Fabricio da Silva' })
+  @ApiProperty({ example: 'Jane Doe' })
   @IsNotEmpty()
   @IsString()
   name: string;
 
-  @ApiProperty({ example: 'fabricio@email.com' })
+  @ApiProperty({ example: 'jane@email.com' })
   @IsEmail()
   email: string;
 
-  @ApiProperty({ example: 'senhaSegura123' })
+  @ApiProperty({ example: 'strongPassword123' })
   @MinLength(5)
   @IsString()
   password: string;

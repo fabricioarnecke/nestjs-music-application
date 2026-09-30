@@ -44,23 +44,23 @@ describe('Playlists (e2e)', () => {
     await app.close();
   });
 
-  it('/playlists (POST) - criar playlist', async () => {
+  it('/playlists (POST) - creates a playlist', async () => {
     const res = await request(app.getHttpServer())
       .post('/playlists')
       .set('Authorization', `Bearer ${jwtToken}`)
       .send({
-        name: 'Minha Playlist',
+        name: 'My Playlist',
         genre: 'Rock',
-        musics: ['musica 1', 'musica 2'],
+        musics: ['song 1', 'song 2'],
       });
 
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty('id');
-    expect(res.body.name).toBe('Minha Playlist');
+    expect(res.body.name).toBe('My Playlist');
     playlistId = res.body.id;
   });
 
-  it('/playlists (GET) - listar playlists do usuário', async () => {
+  it('/playlists (GET) - lists the user playlists', async () => {
     const res = await request(app.getHttpServer())
       .get('/playlists')
       .set('Authorization', `Bearer ${jwtToken}`);
@@ -70,19 +70,19 @@ describe('Playlists (e2e)', () => {
     expect(res.body.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('/playlists/:id (PATCH) - editar playlist', async () => {
+  it('/playlists/:id (PATCH) - updates a playlist', async () => {
     const res = await request(app.getHttpServer())
       .patch(`/playlists/${playlistId}`)
       .set('Authorization', `Bearer ${jwtToken}`)
       .send({
-        name: 'Playlist Editada',
+        name: 'Updated Playlist',
       });
 
     expect(res.status).toBe(200);
-    expect(res.body.name).toBe('Playlist Editada');
+    expect(res.body.name).toBe('Updated Playlist');
   });
 
-  it('/playlists/:id (DELETE) - deletar playlist', async () => {
+  it('/playlists/:id (DELETE) - deletes a playlist', async () => {
     const res = await request(app.getHttpServer())
       .delete(`/playlists/${playlistId}`)
       .set('Authorization', `Bearer ${jwtToken}`);

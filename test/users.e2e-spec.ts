@@ -46,7 +46,7 @@ describe('Users (e2e)', () => {
     await app.close();
   });
 
-  it('/users (POST) - criar novo usuário', async () => {
+  it('/users (POST) - creates a user', async () => {
     const res = await request(app.getHttpServer())
       .post('/users')
       .set('Authorization', `Bearer ${jwtToken}`)
@@ -63,7 +63,7 @@ describe('Users (e2e)', () => {
     expect(res.body.role).toBe('USER');
   });
 
-  it('/users (GET) - listar todos os usuários', async () => {
+  it('/users (GET) - lists all users', async () => {
     const res = await request(app.getHttpServer())
       .get('/users')
       .set('Authorization', `Bearer ${jwtToken}`);
@@ -75,7 +75,7 @@ describe('Users (e2e)', () => {
 
   let createdUserId: number;
 
-  it('/users (POST) - criar usuário para testes individuais', async () => {
+  it('/users (POST) - creates a user for the next tests', async () => {
     const res = await request(app.getHttpServer())
       .post('/users')
       .set('Authorization', `Bearer ${jwtToken}`)
@@ -93,7 +93,7 @@ describe('Users (e2e)', () => {
     expect(res.body.email).toBe('user2@test.com');
   });
 
-  it('/users/:id (GET) - buscar usuário pelo ID', async () => {
+  it('/users/:id (GET) - gets a user by ID', async () => {
     const res = await request(app.getHttpServer())
       .get(`/users/${createdUserId}`)
       .set('Authorization', `Bearer ${jwtToken}`);
@@ -103,17 +103,17 @@ describe('Users (e2e)', () => {
     expect(res.body).not.toHaveProperty('password');
   });
 
-  it('/users/:id (PATCH) - atualizar usuário', async () => {
+  it('/users/:id (PATCH) - updates a user', async () => {
     const res = await request(app.getHttpServer())
       .patch(`/users/${createdUserId}`)
       .set('Authorization', `Bearer ${jwtToken}`)
-      .send({ name: 'User Test Atualizado' });
+      .send({ name: 'Updated User Test' });
 
     expect(res.status).toBe(200);
-    expect(res.body.name).toBe('User Test Atualizado');
+    expect(res.body.name).toBe('Updated User Test');
   });
 
-  it('/users/:id (DELETE) - remover usuário', async () => {
+  it('/users/:id (DELETE) - deletes a user', async () => {
     const res = await request(app.getHttpServer())
       .delete(`/users/${createdUserId}`)
       .set('Authorization', `Bearer ${jwtToken}`);
@@ -122,7 +122,7 @@ describe('Users (e2e)', () => {
     expect(res.body).toHaveProperty('id', createdUserId);
   });
 
-  it('/users/:id (GET) - usuário não encontrado após exclusão', async () => {
+  it('/users/:id (GET) - returns 404 after the user is deleted', async () => {
     const res = await request(app.getHttpServer())
       .get(`/users/${createdUserId}`)
       .set('Authorization', `Bearer ${jwtToken}`);

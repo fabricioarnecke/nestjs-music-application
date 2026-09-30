@@ -35,10 +35,10 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Criar novo usuário' })
+  @ApiOperation({ summary: 'Create a user' })
   @ApiResponse({
     status: 201,
-    description: 'Usuário criado com sucesso.',
+    description: 'User created.',
     type: UserResponseDto,
   })
   @ApiBody({ type: CreateUserDto })
@@ -47,10 +47,10 @@ export class UsersController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos os usuários' })
+  @ApiOperation({ summary: 'List all users' })
   @ApiResponse({
     status: 200,
-    description: 'Lista de usuários, retornada.',
+    description: 'List of users.',
     type: [UserResponseDto],
   })
   findAll() {
@@ -58,15 +58,15 @@ export class UsersController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Buscar usuário por ID' })
+  @ApiOperation({ summary: 'Get a user by ID' })
   @ApiResponse({
     status: 200,
-    description: 'Usuário encontrado.',
+    description: 'User found.',
     type: UserResponseDto,
   })
   @ApiResponse({
     status: 404,
-    description: 'Usuário não encontrado',
+    description: 'User not found.',
   })
   @ApiParam({ name: 'id', type: Number })
   findOne(@Param('id', ParseIntPipe) id: number) {
@@ -74,15 +74,15 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Atualizar usuário por ID' })
+  @ApiOperation({ summary: 'Update a user by ID' })
   @ApiResponse({
     status: 200,
-    description: 'Usuário atualizado com sucesso.',
+    description: 'User updated.',
     type: UserResponseDto,
   })
   @ApiResponse({
     status: 404,
-    description: 'Usuário não encontrado',
+    description: 'User not found.',
   })
   @ApiParam({ name: 'id', type: Number })
   @ApiBody({ type: UpdateUserDto })
@@ -94,15 +94,15 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Remover usuário por ID' })
+  @ApiOperation({ summary: 'Delete a user by ID' })
   @ApiResponse({
     status: 200,
-    description: 'Usuário removido com sucesso.',
+    description: 'User deleted.',
     type: UserResponseDto,
   })
   @ApiResponse({
     status: 404,
-    description: 'Usuário não encontrado',
+    description: 'User not found.',
   })
   @ApiParam({ name: 'id', type: Number })
   remove(@Param('id', ParseIntPipe) id: number) {

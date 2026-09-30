@@ -10,18 +10,18 @@ import { Role } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserDto {
-  @ApiProperty({ example: 'maria da silva', required: false })
+  @ApiProperty({ example: 'John Doe', required: false })
   @IsOptional()
   @IsString()
   @IsNotEmpty()
   name?: string;
 
-  @ApiProperty({ example: 'maria@email.com', required: false })
+  @ApiProperty({ example: 'john@email.com', required: false })
   @IsOptional()
   @IsEmail()
   email?: string;
 
-  @ApiProperty({ example: 'novaSenha123', required: false })
+  @ApiProperty({ example: 'newPassword123', required: false })
   @IsOptional()
   @IsString()
   @MinLength(5)

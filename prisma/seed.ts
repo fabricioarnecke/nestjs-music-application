@@ -8,7 +8,7 @@ async function main() {
   const password = process.env.ADMIN_PASSWORD;
   if (!email || !password) {
     throw new Error(
-      'ADMIN_EMAIL e ADMIN_PASSWORD precisam estar definidos no .env para criar o admin.',
+      'ADMIN_EMAIL and ADMIN_PASSWORD must be set in .env to create the admin user.',
     );
   }
 
@@ -27,9 +27,9 @@ async function main() {
       },
     });
 
-    console.log('✅ Usuário admin criado com sucesso!');
+    console.log('✅ Admin user created.');
   } else {
-    console.log('ℹ️ Usuário admin já existe.');
+    console.log('ℹ️ Admin user already exists.');
   }
 }
 

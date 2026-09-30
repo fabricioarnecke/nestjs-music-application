@@ -7,8 +7,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('API de Música')
-    .setDescription('Documentação da API de usuários e playlists')
+    .setTitle('Music API')
+    .setDescription('API for managing users and their music playlists')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

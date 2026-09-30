@@ -22,7 +22,6 @@ import {
 } from '@nestjs/swagger';
 import { PlaylistResponseDto } from './dtos/playlist-response.dto';
 
-@ApiBearerAuth()
 @ApiTags('Playlists')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -31,24 +30,24 @@ export class PlaylistsController {
   constructor(private readonly playlistsService: PlaylistsService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Cria uma nova playlist' })
+  @ApiOperation({ summary: 'Create a playlist' })
   @ApiResponse({
     status: 201,
-    description: 'Playlist criada com sucesso',
+    description: 'Playlist created',
     type: PlaylistResponseDto,
   })
-  @ApiResponse({ status: 401, description: 'Não Autorizado' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   create(@Request() req, @Body() dto: CreatePlaylistDto) {
     return this.playlistsService.create(req.user.id, dto);
   }
 
   @Get()
   @ApiOperation({
-    summary: 'Lista todas as playlists (ADMIN) ou do próprio usuário',
+    summary: 'List playlists: all of them for admins, your own for other users',
   })
   @ApiResponse({
     status: 200,
-    description: 'Lista de playlists retornada com sucesso',
+    description: 'List of playlists',
     type: [PlaylistResponseDto],
   })
   findAll(@Request() req) {
@@ -56,30 +55,33 @@ export class PlaylistsController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Busca uma playlist pelo ID' })
+  @ApiOperation({ summary: 'Get a playlist by ID' })
   @ApiResponse({
     status: 200,
-    description: 'Playlist retornada com sucesso',
+    description: 'Playlist found',
     type: PlaylistResponseDto,
   })
-  @ApiResponse({ status: 403, description: 'Acesso negado à playlist' })
-  @ApiResponse({ status: 404, description: 'Playlist não encontrada' })
+  @ApiResponse({
+    status: 403,
+    description: 'Access to this playlist is denied',
+  })
+  @ApiResponse({ status: 404, description: 'Playlist not found' })
   findOne(@Param('id', ParseIntPipe) id: number, @Request() req) {
     return this.playlistsService.findOne(id, req.user);
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Atualiza uma playlist pelo ID' })
+  @ApiOperation({ summary: 'Update a playlist by ID' })
   @ApiResponse({
     status: 200,
-    description: 'Playlist atualizada com sucesso',
+    description: 'Playlist updated',
     type: PlaylistResponseDto,
   })
   @ApiResponse({
-    status: 400,
-    description: 'Você não pode editar essa playlist',
+    status: 403,
+    description: 'You cannot edit this playlist',
   })
-  @ApiResponse({ status: 404, description: 'Playlist não encontrada' })
+  @ApiResponse({ status: 404, description: 'Playlist not found' })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Request() req,
@@ -89,17 +91,17 @@ export class PlaylistsController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Remove uma playlist pelo ID' })
+  @ApiOperation({ summary: 'Delete a playlist by ID' })
   @ApiResponse({
     status: 200,
-    description: 'Playlist removida com sucesso',
+    description: 'Playlist deleted',
     type: PlaylistResponseDto,
   })
   @ApiResponse({
     status: 403,
-    description: 'Você não pode deletar essa playlist',
+    description: 'You cannot delete this playlist',
   })
-  @ApiResponse({ status: 404, description: 'Playlist não encontrada' })
+  @ApiResponse({ status: 404, description: 'Playlist not found' })
   remove(@Param('id', ParseIntPipe) id: number, @Request() req) {
     return this.playlistsService.remove(id, req.user);
   }

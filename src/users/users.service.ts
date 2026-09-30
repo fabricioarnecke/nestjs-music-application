@@ -12,9 +12,7 @@ export class UsersService {
   async findByEmail(email: string) {
     const user = await this.usersRepository.findByEmail(email);
     if (!user) {
-      throw new NotFoundException(
-        `Usuario com o email ${email} não encontrado`,
-      );
+      throw new NotFoundException(`User with email ${email} not found`);
     }
     return this.removePassword(user);
   }
@@ -37,7 +35,7 @@ export class UsersService {
   async findOne(id: number) {
     const user = await this.usersRepository.findOne(id);
     if (!user) {
-      throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
+      throw new NotFoundException(`User ${id} not found`);
     }
     return this.removePassword(user);
   }
@@ -45,7 +43,7 @@ export class UsersService {
   async update(id: number, data: UpdateUserDto) {
     const existing = await this.usersRepository.findOne(id);
     if (!existing) {
-      throw new NotFoundException(`Usuário com o ID ${id} não encontrado`);
+      throw new NotFoundException(`User ${id} not found`);
     }
 
     if (data.password) {
@@ -59,7 +57,7 @@ export class UsersService {
   async remove(id: number) {
     const existing = await this.usersRepository.findOne(id);
     if (!existing) {
-      throw new NotFoundException(`Usuário com o ID ${id} não encontrado`);
+      throw new NotFoundException(`User ${id} not found`);
     }
 
     const user = await this.usersRepository.remove(id);

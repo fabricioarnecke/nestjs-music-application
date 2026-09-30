@@ -14,7 +14,7 @@ export class AuthService {
   async validateUser(email: string, password: string) {
     const user = await this.usersRepository.findByEmail(email);
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw new UnauthorizedException('Email ou senha inválidos');
+      throw new UnauthorizedException('Invalid email or password');
     }
     return this.removePassword(user);
   }

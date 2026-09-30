@@ -3,8 +3,8 @@ import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdatePlaylistDto {
   @ApiPropertyOptional({
-    description: 'Nome atualizado da playlist',
-    example: 'Rock pesado 2025',
+    description: 'New playlist name',
+    example: 'Heavy Rock 2025',
   })
   @IsOptional()
   @IsString()
@@ -12,7 +12,7 @@ export class UpdatePlaylistDto {
   name?: string;
 
   @ApiPropertyOptional({
-    description: 'Gênero atualizado da playlist',
+    description: 'New playlist genre',
     example: 'Metal',
   })
   @IsOptional()
@@ -21,7 +21,7 @@ export class UpdatePlaylistDto {
   genre?: string;
 
   @ApiPropertyOptional({
-    description: 'Lista atualizada de músicas',
+    description: 'New list of song names',
     example: ['snuff', 'psychosocial', 'dead memories'],
   })
   @IsOptional()

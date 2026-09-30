@@ -8,8 +8,8 @@ import { UpdatePlaylistDto } from './dtos/update-playlist.dto';
 import { Role } from '@prisma/client';
 import { PlaylistsRepository } from './playlists.repository';
 
-// Erros inesperados (ex.: falha no banco) não são tratados aqui: o filtro de exceções
-// padrão do Nest registra o erro no log e responde 500 genérico, sem expor detalhes internos.
+// Unexpected errors (e.g. a database failure) are not caught here: Nest's default exception
+// filter logs them and returns a generic 500, without exposing internal details.
 @Injectable()
 export class PlaylistsService {
   constructor(private playlistsRepository: PlaylistsRepository) {}
@@ -28,10 +28,10 @@ export class PlaylistsService {
 
   async findOne(id: number, user: { id: number; role: Role }) {
     const playlist = await this.playlistsRepository.findById(id);
-    if (!playlist) throw new NotFoundException('Playlist não encontrada');
+    if (!playlist) throw new NotFoundException('Playlist not found');
 
     if (user.role !== Role.ADMIN && playlist.user_id !== user.id) {
-      throw new ForbiddenException('Acesso negado à playlist');
+      throw new ForbiddenException('Access to this playlist is denied');
     }
 
     return playlist;
@@ -43,10 +43,10 @@ export class PlaylistsService {
     user: { id: number; role: Role },
   ) {
     const playlist = await this.playlistsRepository.findById(id);
-    if (!playlist) throw new NotFoundException('Playlist não encontrada');
+    if (!playlist) throw new NotFoundException('Playlist not found');
 
     if (user.role !== Role.ADMIN && playlist.user_id !== user.id) {
-      throw new ForbiddenException('Você não pode editar essa playlist');
+      throw new ForbiddenException('You cannot edit this playlist');
     }
 
     return this.playlistsRepository.update(id, dto);
@@ -54,10 +54,10 @@ export class PlaylistsService {
 
   async remove(id: number, user: { id: number; role: Role }) {
     const playlist = await this.playlistsRepository.findById(id);
-    if (!playlist) throw new NotFoundException('Playlist não encontrada');
+    if (!playlist) throw new NotFoundException('Playlist not found');
 
     if (user.role !== Role.ADMIN && playlist.user_id !== user.id) {
-      throw new ForbiddenException('Você não pode deletar essa playlist');
+      throw new ForbiddenException('You cannot delete this playlist');
     }
 
     return this.playlistsRepository.delete(id);
