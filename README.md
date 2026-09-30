@@ -1,5 +1,7 @@
 # NestJS Music API
 
+[![CI](https://github.com/fabricioarnecke/nestjs-music-application/actions/workflows/ci.yml/badge.svg)](https://github.com/fabricioarnecke/nestjs-music-application/actions/workflows/ci.yml)
+
 REST API for managing users and their music playlists. Users sign up, log in with a JWT and manage their own
 playlists. Admins manage users and can see and edit every playlist.
 
@@ -11,7 +13,8 @@ playlists. Admins manage users and can see and edit every playlist.
 - User management (CRUD), restricted to admins
 - Request validation with `class-validator` DTOs; unknown fields are rejected
 - Interactive API docs with Swagger
-- End-to-end tests with Jest and Supertest
+- Unit tests and end-to-end tests with Jest and Supertest
+- CI on GitHub Actions: lint, build, tests and a dependency audit on every push and pull request
 - Runs with Docker Compose: database migrations and the admin user are applied on startup
 
 ## Security
@@ -21,6 +24,9 @@ playlists. Admins manage users and can see and edit every playlist.
 - Unexpected errors return a generic `500` response; the details only go to the server log
 - Every playlist route checks ownership, so a user can't read or change someone else's playlist
 - Docker Compose publishes the API and the database on `127.0.0.1` only
+- CI fails on high or critical vulnerabilities in the dependencies, and Dependabot opens weekly update PRs
+- Unit tests cover the access rules: password hashing, sign-up always creating a regular user, playlist ownership
+  and admin-only routes
 
 ## Tech stack
 
@@ -66,11 +72,17 @@ in Swagger.
 
 ## Running the tests
 
+The unit tests don't need a database:
+
+```bash
+npm install
+npm test
+```
+
 The end-to-end tests need a PostgreSQL database and **delete its users and playlists**, so point `DATABASE_URL`
 at a database used only for testing.
 
 ```bash
-npm install
 export DATABASE_URL="postgresql://user:password@localhost:5432/test_db"
 export JWT_SECRET="test-secret"
 npx prisma migrate deploy
