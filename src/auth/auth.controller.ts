@@ -1,14 +1,22 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { Throttle, minutes } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import {
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiOperation,
   ApiTags,
+  ApiTooManyRequestsResponse,
 } from '@nestjs/swagger';
 import { LoginAuthDto } from './dtos/login-auth.dto';
 import { RegisterAuthDto } from './dtos/register-auth.dto';
 
+// 5 requests per minute per IP on each route, to slow down password guessing
+// and the discovery of registered emails through sign-up
+@Throttle({ default: { limit: 5, ttl: minutes(1) } })
+@ApiTooManyRequestsResponse({
+  description: 'Too many attempts; try again later',
+})
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
