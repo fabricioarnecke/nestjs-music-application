@@ -1,6 +1,11 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { LoginAuthDto } from './dtos/login-auth.dto';
 import { RegisterAuthDto } from './dtos/register-auth.dto';
 
@@ -34,6 +39,7 @@ export class AuthController {
       },
     },
   })
+  @ApiConflictResponse({ description: 'Email is already registered' })
   async register(@Body() body: RegisterAuthDto) {
     return this.authService.register(body);
   }

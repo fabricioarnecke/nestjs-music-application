@@ -26,6 +26,6 @@ model Playlist {
   name String
   genre String
   musics String[]
-  user User @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id Int
 }
