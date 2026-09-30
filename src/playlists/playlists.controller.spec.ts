@@ -2,7 +2,7 @@ import { ExecutionContext, INestApplication } from '@nestjs/common';
 import { GUARDS_METADATA } from '@nestjs/common/constants';
 import { Test } from '@nestjs/testing';
 import { Role } from '@prisma/client';
-import * as request from 'supertest';
+import request from 'supertest';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { PlaylistsController } from './playlists.controller';
 import { PlaylistsRepository } from './playlists.repository';
