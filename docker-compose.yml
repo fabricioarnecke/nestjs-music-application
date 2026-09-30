@@ -2,18 +2,17 @@ services:
   backend:
     build:
       context: .
-      args:
-        DATABASE_URL: 'postgresql://fabricio:postgres@db:5432/nestdb'
     container_name: nestjs-music-application
     ports:
-      - '3000:3000'
+      - '127.0.0.1:3000:3000'
     volumes:
       - ./src:/app/src
       - /app/node_modules
     env_file:
       - .env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     command: sh -c "npx prisma migrate deploy && npm run seed && node dist/src/main"
 
   db:
@@ -21,11 +20,16 @@ services:
     container_name: nest_music_postgres
     restart: always
     ports:
-      - '5432:5432'
+      - '127.0.0.1:5432:5432'
     environment:
       POSTGRES_USER: fabricio
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: nestdb
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U fabricio -d nestdb']
+      interval: 2s
+      timeout: 5s
+      retries: 15
     volumes:
       - pgdata:/var/lib/postgresql/data
 
