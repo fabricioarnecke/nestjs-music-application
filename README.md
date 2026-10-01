@@ -2,6 +2,9 @@
 
 [![CI](https://github.com/fabricioarnecke/nestjs-music-application/actions/workflows/ci.yml/badge.svg)](https://github.com/fabricioarnecke/nestjs-music-application/actions/workflows/ci.yml)
 
+**Live demo:** [Swagger docs](https://nestjs-music-application.onrender.com/api). It runs on Render's free plan, so the first
+request after 15 minutes without traffic can take about a minute.
+
 REST API for managing users and their music playlists. Users sign up, log in with a JWT and manage their own
 playlists. Admins manage users and can see and edit every playlist.
 
