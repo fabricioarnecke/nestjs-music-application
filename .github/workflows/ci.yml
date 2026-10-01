@@ -70,3 +70,11 @@ jobs:
           node-version: 24
       # Fails on high and critical vulnerabilities; moderate and low ones show up in the log
       - run: npm audit --audit-level=high
+
+  docker:
+    name: Docker build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # The same image Render builds on deploy
+      - run: docker build -t nestjs-music-application .

@@ -1,12 +1,13 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from 'src/app.module';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { setupApp } from 'src/setup-app';
 import request from 'supertest';
 import * as bcrypt from 'bcryptjs';
 
 describe('Users (e2e)', () => {
-  let app: INestApplication;
+  let app: NestExpressApplication;
   let prisma: PrismaService;
   let jwtToken: string;
 
@@ -15,8 +16,8 @@ describe('Users (e2e)', () => {
       imports: [AppModule],
     }).compile();
 
-    app = moduleRef.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+    app = moduleRef.createNestApplication<NestExpressApplication>();
+    setupApp(app);
     await app.init();
 
     prisma = app.get(PrismaService);

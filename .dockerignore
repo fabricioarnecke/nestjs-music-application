@@ -1,6 +1,9 @@
 node_modules
 .git
+.github
 dist
+coverage
 Dockerfile
 docker-compose.yml
+render.yaml
 .env
