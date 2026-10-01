@@ -1,0 +1,24 @@
+# Render Blueprint: the API runs as a Docker web service on the free plan.
+# The database is a PostgreSQL on Neon, so DATABASE_URL is set in the Render dashboard.
+services:
+  - type: web
+    name: nestjs-music-application
+    runtime: docker
+    plan: free
+    region: virginia
+    branch: main
+    # Deploys a commit on main only after its GitHub checks pass
+    autoDeployTrigger: checksPass
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      # Render puts one proxy in front of the app
+      - key: TRUST_PROXY_HOPS
+        value: '1'

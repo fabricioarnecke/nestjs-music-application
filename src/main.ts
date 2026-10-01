@@ -1,10 +1,17 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { getTrustProxyHops, setupApp } from './setup-app';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // Before the Swagger routes, so the security headers also cover the docs
+  setupApp(app, { trustProxyHops: getTrustProxyHops() });
+
+  // Closes the database connections when the platform stops the container
+  app.enableShutdownHooks();
 
   const config = new DocumentBuilder()
     .setTitle('Music API')
@@ -15,14 +22,6 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
 
   await app.listen(process.env.PORT ?? 3000);
 }

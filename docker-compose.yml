@@ -5,15 +5,11 @@ services:
     container_name: nestjs-music-application
     ports:
       - '127.0.0.1:3000:3000'
-    volumes:
-      - ./src:/app/src
-      - /app/node_modules
     env_file:
       - .env
     depends_on:
       db:
         condition: service_healthy
-    command: sh -c "npx prisma migrate deploy && npm run seed && node dist/src/main"
 
   db:
     image: postgres:15
