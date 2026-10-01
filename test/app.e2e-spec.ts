@@ -22,6 +22,14 @@ const wrongLogin = (app: NestExpressApplication, forwardedFor: string) =>
     .set('X-Forwarded-For', forwardedFor)
     .send({ email: 'nobody@test.com', password: 'wrong-password' });
 
+// X-Forwarded-For as it reaches the app on Render: the client IP, then the
+// Cloudflare and Render proxies, whose IPs change from one request to the next
+let proxyCounter = 0;
+const throughRender = (clientChain: string) => {
+  proxyCounter++;
+  return `${clientChain}, 104.16.0.${proxyCounter}, 10.0.0.${proxyCounter}`;
+};
+
 describe('App (e2e)', () => {
   describe('without a proxy', () => {
     let app: NestExpressApplication;
@@ -61,11 +69,11 @@ describe('App (e2e)', () => {
     });
   });
 
-  describe('behind one proxy', () => {
+  describe("behind Render's proxies", () => {
     let app: NestExpressApplication;
 
     beforeAll(async () => {
-      app = await createApp(1);
+      app = await createApp(3);
     });
 
     afterAll(async () => {
@@ -74,19 +82,22 @@ describe('App (e2e)', () => {
 
     it('rate limits each client IP separately', async () => {
       for (let attempt = 1; attempt <= 5; attempt++) {
-        const res = await wrongLogin(app, '203.0.113.10');
+        const res = await wrongLogin(app, throughRender('203.0.113.10'));
         expect(res.status).toBe(401);
       }
-      const blocked = await wrongLogin(app, '203.0.113.10');
+      const blocked = await wrongLogin(app, throughRender('203.0.113.10'));
       expect(blocked.status).toBe(429);
 
-      const otherClient = await wrongLogin(app, '203.0.113.20');
+      const otherClient = await wrongLogin(app, throughRender('203.0.113.20'));
       expect(otherClient.status).toBe(401);
     });
 
-    it('uses the IP added by the proxy, not one the client sent', async () => {
-      // The client prepends a fake IP; the proxy appends the real one
-      const res = await wrongLogin(app, '198.51.100.1, 203.0.113.10');
+    it('uses the IP added by the proxies, not one the client sent', async () => {
+      // The client sends a fake IP; the proxies keep it and append the real one
+      const res = await wrongLogin(
+        app,
+        throughRender('198.51.100.1, 203.0.113.10'),
+      );
 
       expect(res.status).toBe(429);
     });
