@@ -3,7 +3,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet';
 
 export interface SetupAppOptions {
-  // Number of reverse proxies in front of the app (1 on Render)
+  // Number of reverse proxies in front of the app (3 on Render)
   trustProxyHops?: number;
 }
 
@@ -21,9 +21,10 @@ export function setupApp(
   { trustProxyHops = 0 }: SetupAppOptions = {},
 ) {
   // The rate limiter keys on req.ip. Behind a proxy it has to come from
-  // X-Forwarded-For, but only from the entries the proxies added: trusting more
-  // hops than there are, or any hop when there is no proxy, lets a client
-  // pick its own IP and dodge the limit
+  // X-Forwarded-For, but only from the entries the proxies added. Trusting more
+  // hops than there are, or any hop when there is no proxy, lets a client pick
+  // its own IP and dodge the limit; trusting fewer keys the limit on a proxy IP
+  // instead of the client's
   if (trustProxyHops > 0) {
     app.set('trust proxy', trustProxyHops);
   }

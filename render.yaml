@@ -19,6 +19,7 @@ services:
         sync: false
       - key: ADMIN_PASSWORD
         sync: false
-      # Render puts one proxy in front of the app
+      # Requests reach the app through Cloudflare and two Render proxies, so
+      # X-Forwarded-For ends with: <client>, <Cloudflare>, <Render proxy>
       - key: TRUST_PROXY_HOPS
-        value: '1'
+        value: '3'

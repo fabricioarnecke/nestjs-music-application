@@ -63,7 +63,7 @@ in Swagger.
 | `JWT_SECRET` | Key used to sign the JWTs (required) |
 | `ADMIN_EMAIL` | Email of the admin user created on startup |
 | `ADMIN_PASSWORD` | Password of that admin user |
-| `TRUST_PROXY_HOPS` | Number of reverse proxies in front of the API (`1` on Render); leave it unset locally |
+| `TRUST_PROXY_HOPS` | Number of reverse proxies in front of the API (`3` on Render: Cloudflare and two Render proxies); leave it unset locally |
 | `PORT` | Port the API listens on (default `3000`; Render sets it) |
 
 > The values in `.env.example` are for local development only.
