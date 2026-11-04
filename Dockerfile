@@ -1,5 +1,5 @@
 # Build stage: installs every dependency and compiles the app
-FROM node:24-slim AS build
+FROM node:26-slim AS build
 
 # Prisma needs OpenSSL to pick its query engine
 RUN apt-get update \
@@ -20,7 +20,7 @@ RUN npm run prisma-generate \
   && npm prune --omit=dev
 
 # Runtime stage: only the compiled app and the production dependencies
-FROM node:24-slim
+FROM node:26-slim
 
 # ca-certificates lets Prisma verify the TLS certificate of a hosted database
 RUN apt-get update \
